@@ -153,33 +153,114 @@ const tag = {
 
 // ── Nav ────────────────────────────────────────────────────────────────────
 function Nav({ dark }) {
-  const bg    = dark ? "rgba(17,19,24,0.95)"   : "rgba(240,244,248,0.92)";
-  const col   = dark ? "#F1F5F9"               : "#0D1117";
-  const muted = dark ? "rgba(241,245,249,0.45)": "#64748B";
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const [open, setOpen] = useState(false); // mobile menu toggle
+  const bg    = dark ? "rgba(17,19,24,0.95)"    : "rgba(240,244,248,0.92)";
+  const col   = dark ? "#F1F5F9"                : "#0D1117";
+  const muted = dark ? "rgba(241,245,249,0.45)" : "#64748B";
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    setOpen(false); // close menu after click on mobile
+  };
+
+  const navItems = ["about","skills","projects","contact"];
+
   return (
     <nav style={{
-      position:"fixed",top:0,left:0,right:0,zIndex:100,
-      display:"flex",justifyContent:"space-between",alignItems:"center",
-      padding:"1.25rem 2.5rem",
-      background:bg,backdropFilter:"blur(12px)",
-      borderBottom:"1px solid var(--border)",transition:"background 0.3s",
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      zIndex: 100,
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: "1.25rem 2.5rem",
+      background: bg,
+      backdropFilter: "blur(12px)",
+      borderBottom: "1px solid var(--border)",
+      transition: "background 0.3s",
+      flexWrap: "wrap",
     }}>
-      <div style={{ fontFamily:"var(--sans)",fontSize:"1.1rem",color:col }}>Keri Bienert</div>
-      <ul style={{ display:"flex",gap:"2rem",listStyle:"none",padding:0,margin:0 }}>
-        {["about","skills","projects","contact"].map(id => (
+      <div style={{ fontFamily: "var(--sans)", fontSize: "1.1rem", color: col }}>
+        Keri Bienert
+      </div>
+
+      {/* Hamburger / Close button */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontSize: "1.5rem",
+          color: col,
+          display: "none", // hidden on desktop
+        }}
+      >
+        {open ? "✕" : "☰"}
+      </button>
+
+      {/* Mobile menu */}
+      <ul style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1.5rem",
+        listStyle: "none",
+        padding: 0,
+        margin: 0,
+        width: "100%",
+        maxHeight: open ? "500px" : "0",
+        overflow: "hidden",
+        transition: "max-height 0.3s ease, padding 0.3s ease",
+        padding: open ? "1rem 0 0 0" : "0",
+      }}>
+        {navItems.map(id => (
           <li key={id}>
-            <button onClick={() => scrollTo(id)} style={{
-              background:"none",border:"none",cursor:"pointer",
-              fontSize:"0.8rem",fontWeight:400,color:muted,
-              letterSpacing:"0.06em",textTransform:"uppercase",transition:"color 0.2s",
-            }}
+            <button
+              onClick={() => scrollTo(id)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: 400,
+                color: muted,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                transition: "color 0.2s",
+              }}
               onMouseEnter={e => e.target.style.color = col}
               onMouseLeave={e => e.target.style.color = muted}
-            >{id}</button>
+            >
+              {id}
+            </button>
           </li>
         ))}
       </ul>
+
+      {/* Responsive CSS */}
+      <style>
+        {`
+          @media(min-width: 768px) {
+            nav ul {
+              flex-direction: row !important;
+              gap: 2rem !important;
+              width: auto !important;
+              max-height: none !important;
+              padding: 0 !important;
+            }
+            nav > button {
+              display: none !important; /* hide hamburger */
+            }
+          }
+          @media(max-width: 767px) {
+            nav > button {
+              display: block !important; /* show hamburger */
+            }
+          }
+        `}
+      </style>
     </nav>
   );
 }
