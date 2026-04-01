@@ -32,21 +32,6 @@ function FadeIn({ children, delay = 0, style = {} }) {
 }
 
 // ── SVG Icons ──────────────────────────────────────────────────────────────
-const Icon = ({ d, children, size = 18 }) => (
-  <svg
-    viewBox="0 0 24 24"
-    width={size}
-    height={size}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.6"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {children}
-  </svg>
-);
-
 const icons = {
   zap: <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
   layout: <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>,
@@ -100,7 +85,7 @@ const EXPERIENCE = [
     ],
   },
   {
-    dates: "Sep 2019 – Jan 2024",
+    dates: "2019 – Jan 2024",
     role: "Frontend Developer",
     company: "ImPACT Applications, Inc.",
     bullets: [
@@ -135,13 +120,17 @@ const GLOBAL_CSS = `
     -webkit-font-smoothing: antialiased;
   }
   :root {
-    --cream: #FAF8F4;
-    --ink: #1A1A18;
-    --ink-muted: #6B6B63;
-    --accent: #2B5CE6;
-    --accent-bg: #E8ECF5;
-    --accent-bg-deep: #D6DCF0;
-    --border: rgba(26,26,24,0.10);
+    --cream: #F0F4F8;
+    --ink: #0D1117;
+    --ink-muted: #64748B;
+    --accent: #2DD4BF;
+    --accent-dark: #14B8A6;
+    --accent-bg: rgba(45,212,191,0.10);
+    --accent-bg-deep: rgba(45,212,191,0.18);
+    --surface: #1E2130;
+    --surface-2: #252A3D;
+    --border: rgba(45,212,191,0.12);
+    --border-subtle: rgba(255,255,255,0.06);
     --serif: 'DM Serif Display', Georgia, serif;
     --sans: 'DM Sans', system-ui, sans-serif;
   }
@@ -156,15 +145,17 @@ const GLOBAL_CSS = `
 // ── Shared style helpers ───────────────────────────────────────────────────
 const tag = {
   fontSize: "0.7rem", padding: "0.22rem 0.6rem",
-  background: "var(--cream)", border: "1px solid var(--border)",
-  borderRadius: "2px", color: "var(--ink-muted)",
+  background: "rgba(45,212,191,0.08)",
+  border: "1px solid rgba(45,212,191,0.2)",
+  borderRadius: "2px", color: "#2DD4BF",
+  color:"var(--ink-muted)"
 };
 
 // ── Nav ────────────────────────────────────────────────────────────────────
 function Nav({ dark }) {
-  const bg   = dark ? "rgba(26,26,24,0.92)"    : "rgba(250,248,244,0.9)";
-  const col  = dark ? "#FAF8F4"                : "#1A1A18";
-  const muted= dark ? "rgba(250,248,244,0.5)"  : "#6B6B63";
+  const bg    = dark ? "rgba(17,19,24,0.95)"   : "rgba(240,244,248,0.92)";
+  const col   = dark ? "#F1F5F9"               : "#0D1117";
+  const muted = dark ? "rgba(241,245,249,0.45)": "#64748B";
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   return (
     <nav style={{
@@ -174,7 +165,7 @@ function Nav({ dark }) {
       background:bg,backdropFilter:"blur(12px)",
       borderBottom:"1px solid var(--border)",transition:"background 0.3s",
     }}>
-      <div style={{ fontFamily:"var(--serif)",fontSize:"1.1rem",color:col }}>Keri Bienert</div>
+      <div style={{ fontFamily:"var(--sans)",fontSize:"1.1rem",color:col }}>Keri Bienert</div>
       <ul style={{ display:"flex",gap:"2rem",listStyle:"none",padding:0,margin:0 }}>
         {["about","skills","projects","contact"].map(id => (
           <li key={id}>
@@ -199,20 +190,14 @@ function Hero() {
   return (
     <section style={{
       minHeight:"100vh",display:"flex",flexDirection:"column",justifyContent:"flex-end",
-      padding:"0 2.5rem 5rem",position:"relative",overflow:"hidden",background:"var(--cream)",
+      padding:"0 2.5rem 5rem",position:"relative",overflow:"hidden",
+      background:"linear-gradient(160deg, #111318 0%, #1E2130 100%)",
     }}>
-      {/* Diagonal architectural lines */}
+      {/* subtle teal glow behind content */}
       <div style={{
-        position:"absolute",inset:0,pointerEvents:"none",
-        background:`
-          linear-gradient(135deg,transparent 49.8%,rgba(26,26,24,0.04) 49.8%,rgba(26,26,24,0.04) 50.2%,transparent 50.2%),
-          linear-gradient(45deg, transparent 49.8%,rgba(26,26,24,0.03) 49.8%,rgba(26,26,24,0.03) 50.2%,transparent 50.2%)
-        `,
-      }}/>
-      {/* Vertical accent line */}
-      <div className="hero-after" style={{
-        position:"absolute",top:"15%",bottom:"15%",left:"55%",
-        width:1,background:"linear-gradient(to bottom,transparent,rgba(43,92,230,0.18),transparent)",
+        position:"absolute",top:"30%",left:"-10%",
+        width:"55vw",height:"55vw",borderRadius:"50%",
+        background:"radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 70%)",
         pointerEvents:"none",
       }}/>
       <div style={{ position:"relative",zIndex:1,maxWidth:900 }}>
@@ -222,18 +207,20 @@ function Hero() {
             fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.1em",textTransform:"uppercase",
             color:"var(--accent)",background:"var(--accent-bg)",
             padding:"0.35rem 0.9rem",borderRadius:"2px",marginBottom:"1.5rem",
+            border:"1px solid rgba(45,212,191,0.2)",
           }}>
             <span style={{ width:6,height:6,background:"var(--accent)",borderRadius:"50%",display:"inline-block" }}/>
             Frontend Developer & UX Engineer · San Diego, CA
           </span>
           <h1 style={{
-            fontFamily:"var(--serif)",fontSize:"clamp(3rem,7vw,6rem)",
-            lineHeight:1.0,letterSpacing:"-0.02em",marginBottom:"1.5rem",color:"var(--ink)",
+            fontFamily:"var(--sans)",fontSize:"clamp(3rem,7vw,4rem)",
+            lineHeight:1.0,marginBottom:"1.5rem",color:"#F1F5F9",
           }}>
-            Design that<br/>ships <em style={{ fontStyle:"italic",color:"var(--accent)" }}>beautifully.</em>
+            Turning Figma designs into{" "}
+            <span style={{ color:"var(--accent)" }}>real React experiences.</span>
           </h1>
-          <p style={{ fontSize:"1.1rem",fontWeight:300,color:"var(--ink-muted)",maxWidth:540,lineHeight:1.7,marginBottom:"2.5rem" }}>
-            6+ years translating Figma concepts into pixel-precise, responsive React interfaces — from first prototype to production.
+          <p style={{ fontSize:"1.1rem",fontWeight:300,color:"#64748B",maxWidth:540,lineHeight:1.7,marginBottom:"2.5rem" }}>
+            6+ years of engineering pixel-precise React interfaces. From Figma prototype to production deployment.
           </p>
           <div style={{ display:"flex",gap:"1rem",flexWrap:"wrap",alignItems:"center" }}>
             {[
@@ -242,23 +229,29 @@ function Hero() {
             ].map(({ label, id, primary }) => (
               <button key={id} onClick={() => scrollTo(id)} style={{
                 display:"inline-block",padding:"0.8rem 1.75rem",
-                background: primary ? "var(--ink)" : "transparent",
-                color: primary ? "var(--cream)" : "var(--ink)",
+                background: primary ? "var(--accent)" : "transparent",
+                color: primary ? "#0D1117" : "#F1F5F9",
                 fontSize:"0.85rem",fontWeight: primary ? 500 : 400,
-                border: primary ? "none" : "1px solid rgba(26,26,24,0.25)",
+                border: primary ? "none" : "1px solid rgba(241,245,249,0.2)",
                 borderRadius:"2px",cursor:"pointer",letterSpacing:"0.03em",fontFamily:"var(--sans)",
                 transition:"background 0.2s,transform 0.15s,border-color 0.2s",
               }}
-                onMouseEnter={e => { e.currentTarget.style.background=primary?"var(--accent)":"transparent"; e.currentTarget.style.transform="translateY(-1px)"; if(!primary) e.currentTarget.style.borderColor="var(--ink)"; }}
-                onMouseLeave={e => { e.currentTarget.style.background=primary?"var(--ink)":"transparent"; e.currentTarget.style.transform="translateY(0)"; if(!primary) e.currentTarget.style.borderColor="rgba(26,26,24,0.25)"; }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = primary ? "var(--accent-dark)" : "rgba(241,245,249,0.06)";
+                  e.currentTarget.style.transform="translateY(-1px)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = primary ? "var(--accent)" : "transparent";
+                  e.currentTarget.style.transform="translateY(0)";
+                }}
               >{label}</button>
             ))}
           </div>
-          <div style={{ display:"flex",gap:"3rem",paddingTop:"3rem",borderTop:"1px solid var(--border)",marginTop:"2rem",flexWrap:"wrap" }}>
+          <div style={{ display:"flex",gap:"3rem",paddingTop:"3rem",borderTop:"1px solid rgba(45,212,191,0.15)",marginTop:"2rem",flexWrap:"wrap" }}>
             {[["6+","Years experience"],["200+","Pages shipped"],["93%","LCP improvement"]].map(([num,lbl]) => (
               <div key={lbl}>
-                <span style={{ fontFamily:"var(--serif)",fontSize:"2.2rem",color:"var(--ink)",display:"block" }}>{num}</span>
-                <span style={{ fontSize:"0.72rem",color:"var(--ink-muted)",textTransform:"uppercase",letterSpacing:"0.08em" }}>{lbl}</span>
+                <span style={{ fontFamily:"var(--sans)",fontSize:"2.2rem",color:"var(--accent)",display:"block" }}>{num}</span>
+                <span style={{ fontSize:"0.72rem",color:"#64748B",textTransform:"uppercase",letterSpacing:"0.08em" }}>{lbl}</span>
               </div>
             ))}
           </div>
@@ -271,11 +264,11 @@ function Hero() {
 // ── About ──────────────────────────────────────────────────────────────────
 function About() {
   return (
-    <section id="about" style={{ padding:"6rem 2.5rem",background:"#fff",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)" }}>
+    <section id="about" style={{ padding:"6rem 2.5rem",background:"#F0F4F8",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)" }}>
       <div className="about-grid" style={{ maxWidth:1100,margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"5rem",alignItems:"start" }}>
         <FadeIn>
-          <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent)",marginBottom:"1rem" }}>About</p>
-          <h2 style={{ fontFamily:"var(--serif)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,marginBottom:"1rem" }}>Where design<br/>meets code.</h2>
+          <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent-dark)",marginBottom:"1rem" }}>About</p>
+          <h2 style={{ fontFamily:"var(--sans)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,marginBottom:"1rem",color:"var(--ink)" }}>Where design<br/>meets code.</h2>
           {[
             <p>I'm a frontend developer and UX engineer who lives in the space between <strong style={{color:"var(--ink)",fontWeight:500}}>Figma and the browser</strong> — comfortable enough with design systems to build them, and fluent enough in React to own production UI end-to-end.</p>,
             <p>I've spent 6+ years working on <strong style={{color:"var(--ink)",fontWeight:500}}>marketing sites, LMS platforms, eCommerce, and SaaS products</strong>, partnering with design, product, and engineering to ship interfaces that are fast, accessible, and genuinely delightful to use.</p>,
@@ -287,14 +280,14 @@ function About() {
             {HIGHLIGHTS.map(({ icon, label, val }) => (
               <div key={label} style={{
                 display:"flex",gap:"1rem",alignItems:"flex-start",
-                padding:"1.25rem 1.5rem",background:"var(--cream)",
+                padding:"1.25rem 1.5rem",background:"#fff",
                 border:"1px solid var(--border)",borderRadius:"2px",
               }}>
                 <div style={{ width:20,height:20,flexShrink:0,marginTop:"0.15rem",borderRadius:"2px",background:"var(--accent-bg)",display:"flex",alignItems:"center",justifyContent:"center" }}>
                   {icons[icon]}
                 </div>
                 <div>
-                  <div style={{ fontSize:"0.78rem",fontWeight:500,color:"var(--accent)",textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:"0.2rem" }}>{label}</div>
+                  <div style={{ fontSize:"0.78rem",fontWeight:500,color:"var(--accent-dark)",textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:"0.2rem" }}>{label}</div>
                   <div style={{ fontSize:"0.92rem",color:"var(--ink)" }}>{val}</div>
                 </div>
               </div>
@@ -309,13 +302,13 @@ function About() {
 // ── Skills ─────────────────────────────────────────────────────────────────
 function Skills() {
   return (
-    <section id="skills" style={{ padding:"6rem 2.5rem" }}>
+    <section id="skills" style={{ padding:"6rem 2.5rem",background:"#fff" }}>
       <div style={{ maxWidth:1100,margin:"0 auto" }}>
         <FadeIn>
           <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-end",gap:"2rem",flexWrap:"wrap",marginBottom:"3.5rem" }}>
             <div>
-              <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent)",marginBottom:"1rem" }}>Skills</p>
-              <h2 style={{ fontFamily:"var(--serif)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,marginBottom:"1rem" }}>Full-stack design<br/>&amp; development.</h2>
+              <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent-dark)",marginBottom:"1rem" }}>Skills</p>
+              <h2 style={{ fontFamily:"var(--sans)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,marginBottom:"1rem",color:"var(--ink)" }}>Full-stack design<br/>&amp; development.</h2>
             </div>
             <p style={{ fontSize:"1rem",color:"var(--ink-muted)",maxWidth:480 }}>Spanning the full design-to-code workflow — from wireframes and prototypes to production-ready components.</p>
           </div>
@@ -323,12 +316,12 @@ function Skills() {
         <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:"1.5rem" }}>
           {SKILLS.map(({ icon, title, tags }, i) => (
             <FadeIn key={title} delay={i * 0.06}>
-              <div style={{ padding:"1.75rem",background:"#fff",border:"1px solid var(--border)",borderRadius:"2px",height:"100%",transition:"box-shadow 0.2s,transform 0.2s",cursor:"default" }}
-                onMouseEnter={e => { e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow="0 8px 28px rgba(26,26,24,0.06)"; }}
-                onMouseLeave={e => { e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; }}
+              <div style={{ padding:"1.75rem",background:"#F0F4F8",border:"1px solid var(--border)",borderRadius:"2px",height:"100%",transition:"box-shadow 0.2s,transform 0.2s,border-color 0.2s",cursor:"default" }}
+                onMouseEnter={e => { e.currentTarget.style.transform="translateY(-3px)"; e.currentTarget.style.boxShadow="0 8px 28px rgba(45,212,191,0.08)"; e.currentTarget.style.borderColor="rgba(45,212,191,0.35)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform="translateY(0)"; e.currentTarget.style.boxShadow="none"; e.currentTarget.style.borderColor="var(--border)"; }}
               >
                 <div style={{ width:28,height:28,marginBottom:"1rem",display:"flex",alignItems:"center",justifyContent:"center" }}>{icons[icon]}</div>
-                <h4 style={{ fontSize:"0.88rem",fontWeight:500,marginBottom:"0.75rem",letterSpacing:"0.01em" }}>{title}</h4>
+                <h4 style={{ fontSize:"0.88rem",fontWeight:500,marginBottom:"0.75rem",letterSpacing:"0.01em",color:"var(--ink)" }}>{title}</h4>
                 <div style={{ display:"flex",flexWrap:"wrap",gap:"0.4rem" }}>
                   {tags.map(t => <span key={t} style={tag}>{t}</span>)}
                 </div>
@@ -344,35 +337,35 @@ function Skills() {
 // ── Projects ───────────────────────────────────────────────────────────────
 function Projects() {
   return (
-    <section id="projects" style={{ padding:"6rem 2.5rem",background:"var(--ink)",color:"var(--cream)" }}>
+    <section id="projects" style={{ padding:"6rem 2.5rem",background:"#111318",color:"#F1F5F9" }}>
       <div style={{ maxWidth:1100,margin:"0 auto" }}>
         <FadeIn>
           <div style={{ display:"flex",justifyContent:"space-between",alignItems:"flex-end",gap:"2rem",flexWrap:"wrap",marginBottom:"3.5rem" }}>
             <div>
-              <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"#8AA4F0",marginBottom:"1rem" }}>Selected Work</p>
-              <h2 style={{ fontFamily:"var(--serif)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,color:"var(--cream)",marginBottom:"1rem" }}>Projects that<br/>moved the needle.</h2>
+              <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent)",marginBottom:"1rem" }}>Selected Work</p>
+              <h2 style={{ fontFamily:"var(--sans)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,color:"#F1F5F9",marginBottom:"1rem" }}>What I've Built</h2>
             </div>
-            <p style={{ fontSize:"1rem",color:"rgba(250,248,244,0.5)",maxWidth:480 }}>Real outcomes from real products — performance wins, design systems, and conversion experiments.</p>
+            <p style={{ fontSize:"1rem",color:"#64748B",maxWidth:480 }}>Real outcomes from real products — performance wins, design systems, and conversion experiments.</p>
           </div>
         </FadeIn>
-        <div className="projects-grid" style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:"1px",border:"1px solid rgba(250,248,244,0.08)" }}>
+        <div className="projects-grid" style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(320px,1fr))",gap:"1px",border:"1px solid rgba(45,212,191,0.1)" }}>
           {PROJECTS.map(({ company, title, desc, stat, statLabel, tags }, i) => (
             <FadeIn key={title} delay={i * 0.07}>
-              <div style={{ padding:"2rem",background:"rgba(255,255,255,0.03)",display:"flex",flexDirection:"column",gap:"1rem",height:"100%",transition:"background 0.2s" }}
-                onMouseEnter={e => e.currentTarget.style.background="rgba(255,255,255,0.07)"}
-                onMouseLeave={e => e.currentTarget.style.background="rgba(255,255,255,0.03)"}
+              <div style={{ padding:"2rem",background:"rgba(255,255,255,0.02)",display:"flex",flexDirection:"column",gap:"1rem",height:"100%",transition:"background 0.2s" }}
+                onMouseEnter={e => e.currentTarget.style.background="rgba(45,212,191,0.05)"}
+                onMouseLeave={e => e.currentTarget.style.background="rgba(255,255,255,0.02)"}
               >
                 <div>
-                  <div style={{ fontSize:"0.7rem",letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(250,248,244,0.35)",marginBottom:"0.35rem" }}>{company}</div>
-                  <div style={{ fontFamily:"var(--serif)",fontSize:"1.25rem",color:"var(--cream)",lineHeight:1.2 }}>{title}</div>
+                  <div style={{ fontSize:"0.7rem",letterSpacing:"0.1em",textTransform:"uppercase",color:"rgba(241,245,249,0.3)",marginBottom:"0.35rem" }}>{company}</div>
+                  <div style={{ fontFamily:"var(--sans)",fontSize:"1.25rem",color:"#F1F5F9",lineHeight:1.2 }}>{title}</div>
                 </div>
-                <p style={{ fontSize:"0.88rem",color:"rgba(250,248,244,0.6)",lineHeight:1.7,flex:1 }}>{desc}</p>
+                <p style={{ fontSize:"0.88rem",color:"#64748B",lineHeight:1.7,flex:1 }}>{desc}</p>
                 <div>
-                  <span style={{ fontFamily:"var(--serif)",fontSize:"1.6rem",color:"#8AA4F0" }}>{stat}</span>
-                  <span style={{ fontSize:"0.72rem",color:"rgba(250,248,244,0.4)",marginLeft:"0.25rem" }}>{statLabel}</span>
+                  <span style={{ fontFamily:"var(--sans)",fontSize:"1.6rem",color:"var(--accent)" }}>{stat}</span>
+                  <span style={{ fontSize:"0.72rem",color:"rgba(241,245,249,0.35)",marginLeft:"0.25rem" }}>{statLabel}</span>
                 </div>
                 <div style={{ display:"flex",flexWrap:"wrap",gap:"0.4rem" }}>
-                  {tags.map(t => <span key={t} style={{ fontSize:"0.68rem",padding:"0.2rem 0.55rem",border:"1px solid rgba(250,248,244,0.14)",borderRadius:"2px",color:"rgba(250,248,244,0.5)" }}>{t}</span>)}
+                  {tags.map(t => <span key={t} style={{ fontSize:"0.68rem",padding:"0.2rem 0.55rem",border:"1px solid rgba(45,212,191,0.2)",borderRadius:"2px",color:"rgba(45,212,191,0.7)" }}>{t}</span>)}
                 </div>
               </div>
             </FadeIn>
@@ -386,19 +379,18 @@ function Projects() {
 // ── Experience ─────────────────────────────────────────────────────────────
 function Experience() {
   return (
-    <section id="experience" style={{ padding:"6rem 2.5rem",borderTop:"1px solid var(--border)" }}>
+    <section id="experience" style={{ padding:"6rem 2.5rem",borderTop:"1px solid var(--border)",background:"#F0F4F8" }}>
       <div style={{ maxWidth:700,margin:"0 auto" }}>
         <FadeIn>
-          <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent)",marginBottom:"1rem" }}>Experience</p>
-          <h2 style={{ fontFamily:"var(--serif)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,marginBottom:"3rem" }}>Timeline.</h2>
+          <h2 style={{ fontFamily:"var(--sans)",fontSize:"clamp(2rem,4vw,3rem)",lineHeight:1.1,marginBottom:"3rem",color:"var(--ink)" }}>Work Experience</h2>
         </FadeIn>
         {EXPERIENCE.map(({ dates, role, company, bullets }, i) => (
           <FadeIn key={company} delay={i * 0.1}>
             <div className="exp-item" style={{ display:"grid",gridTemplateColumns:"120px 1fr",gap:"2rem",padding:"2rem 0",borderBottom:"1px solid var(--border)" }}>
               <div style={{ fontSize:"0.75rem",color:"var(--ink-muted)",letterSpacing:"0.03em",paddingTop:"0.35rem",lineHeight:1.6 }}>{dates}</div>
               <div>
-                <div style={{ fontSize:"0.75rem",fontWeight:500,color:"var(--accent)",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:"0.3rem" }}>{role}</div>
-                <div style={{ fontFamily:"var(--serif)",fontSize:"1.2rem",marginBottom:"0.75rem" }}>{company}</div>
+                <div style={{ fontSize:"0.75rem",fontWeight:500,color:"var(--accent-dark)",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:"0.3rem" }}>{role}</div>
+                <div style={{ fontFamily:"var(--sans)",fontSize:"1.2rem",marginBottom:"0.75rem",color:"var(--ink)" }}>{company}</div>
                 <ul style={{ listStyle:"none",padding:0,margin:0,display:"flex",flexDirection:"column",gap:"0.5rem" }}>
                   {bullets.map(b => (
                     <li key={b} style={{ fontSize:"0.88rem",color:"var(--ink-muted)",lineHeight:1.65,paddingLeft:"1rem",position:"relative" }}>
@@ -415,8 +407,8 @@ function Experience() {
           <div className="exp-item" style={{ display:"grid",gridTemplateColumns:"120px 1fr",gap:"2rem",padding:"2rem 0" }}>
             <div style={{ fontSize:"0.75rem",color:"var(--ink-muted)",paddingTop:"0.35rem" }}>Education</div>
             <div>
-              <div style={{ fontSize:"0.75rem",fontWeight:500,color:"var(--accent)",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:"0.3rem" }}>B.A. English</div>
-              <div style={{ fontFamily:"var(--serif)",fontSize:"1.2rem" }}>University of Maryland, College Park</div>
+              <div style={{ fontSize:"0.75rem",fontWeight:500,color:"var(--accent-dark)",textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:"0.3rem" }}>B.A. English</div>
+              <div style={{ fontFamily:"var(--sans)",fontSize:"1.2rem",color:"var(--ink)" }}>University of Maryland, College Park</div>
             </div>
           </div>
         </FadeIn>
@@ -429,24 +421,24 @@ function Experience() {
 function Contact() {
   const links = [
     { icon:"linkedin", label:"linkedin.com/in/keribienert", href:"https://linkedin.com/in/keribienert" },
-    { icon:"mail",     label:"keri.bienert@gmail.com",       href:"keri.bienert@gmail.com" },
+    { icon:"mail",     label:"keri.bienert@gmail.com",      href:"mailto:keri.bienert@gmail.com" },
     { icon:"pin",      label:"San Diego, CA — remote friendly", href:null },
   ];
   return (
-    <section id="contact" style={{ padding:"6rem 2.5rem",background:"var(--accent-bg)",borderTop:"1px solid var(--accent-bg-deep)" }}>
+    <section id="contact" style={{ padding:"6rem 2.5rem",background:"#1E2130",borderTop:"1px solid rgba(45,212,191,0.12)" }}>
       <div style={{ maxWidth:1100,margin:"0 auto",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"2rem" }}>
         <FadeIn>
           <p style={{ fontSize:"0.72rem",fontWeight:500,letterSpacing:"0.12em",textTransform:"uppercase",color:"var(--accent)",marginBottom:"1rem" }}>Contact</p>
-          <h2 style={{ fontFamily:"var(--serif)",fontSize:"clamp(1.6rem,3vw,2.5rem)",lineHeight:1.1,marginBottom:"1rem" }}>Let's build<br/>something great.</h2>
-          <p style={{ fontSize:"1rem",color:"#4A5E9A",maxWidth:480 }}>Open to full-time and contract roles blending UX design and frontend development.</p>
+          <h2 style={{ fontFamily:"var(--sans)",fontSize:"clamp(1.6rem,3vw,2.5rem)",lineHeight:1.1,marginBottom:"1rem",color:"#F1F5F9" }}>Connect with me.</h2>
+          <p style={{ fontSize:"1rem",color:"#64748B",maxWidth:480 }}>Whether it's a technical question or just a quick hello, I'm best reached via LinkedIn or Gmail.</p>
         </FadeIn>
         <FadeIn delay={0.1}>
           <div style={{ display:"flex",flexDirection:"column",gap:"0.75rem" }}>
             {links.map(({ icon, label, href }) => {
               const inner = (
-                <div style={{ display:"flex",alignItems:"center",gap:"0.9rem",fontSize:"0.9rem",color:"var(--ink)",padding:"0.85rem 1.25rem",background:"#fff",border:"1px solid var(--accent-bg-deep)",borderRadius:"2px",transition:"transform 0.15s,box-shadow 0.15s",cursor:href?"pointer":"default" }}
-                  onMouseEnter={e => { if(href){ e.currentTarget.style.transform="translateX(4px)"; e.currentTarget.style.boxShadow="0 4px 16px rgba(43,92,230,0.1)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform="translateX(0)"; e.currentTarget.style.boxShadow="none"; }}
+                <div style={{ display:"flex",alignItems:"center",gap:"0.9rem",fontSize:"0.9rem",color:"#F1F5F9",padding:"0.85rem 1.25rem",background:"rgba(255,255,255,0.04)",border:"1px solid rgba(45,212,191,0.15)",borderRadius:"2px",transition:"transform 0.15s,background 0.15s,border-color 0.15s",cursor:href?"pointer":"default" }}
+                  onMouseEnter={e => { if(href){ e.currentTarget.style.transform="translateX(4px)"; e.currentTarget.style.background="rgba(45,212,191,0.08)"; e.currentTarget.style.borderColor="rgba(45,212,191,0.35)"; }}}
+                  onMouseLeave={e => { e.currentTarget.style.transform="translateX(0)"; e.currentTarget.style.background="rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor="rgba(45,212,191,0.15)"; }}
                 >
                   <div style={{ width:28,height:28,background:"var(--accent-bg)",borderRadius:"2px",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center" }}>
                     {icons[icon]}
@@ -491,7 +483,7 @@ export default function KeriBienertPortfolio() {
       <Projects />
       <Experience />
       <Contact />
-      <footer style={{ textAlign:"center",padding:"2rem",fontSize:"0.75rem",color:"var(--ink-muted)",borderTop:"1px solid var(--border)",letterSpacing:"0.04em" }}>
+      <footer style={{ textAlign:"center",padding:"2rem",fontSize:"0.75rem",color:"#64748B",borderTop:"1px solid rgba(45,212,191,0.1)",background:"#111318",letterSpacing:"0.04em" }}>
         © 2026 Keri Bienert · Frontend Developer & UX Engineer
       </footer>
     </>
